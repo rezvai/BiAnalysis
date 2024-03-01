@@ -8,6 +8,19 @@ update joblist set employer  = lower(employer) ---Приводим к нижне
 
 update joblist set skills = lower(skills) ---Приводим к нижнему регистру поле skills 
 
-update joblist set work_schedule  = lower(work_schedule) ---Приводим к нижнему регистру поле work_schedule 
+update joblist set work_schedule  = lower(work_schedule) ---Приводим к нижнему регистру поле work_schedule
+
+select count(case when nullif(sallary, 0) is null then 1 end) as empty, count(case when nullif(sallary, 0) is not null then 1 end) as notempty from joblist j ---Выводим информацию о прупущенных значениях в поле sallary
+
+update joblist set sallary = (select avg(sallary) from joblist) where sallary = 0 --- Заполнение пропущенных элементов поля Sallary средним значением
+
+select count(case when nullif(skills, '') is null then 1 end) as empty, count(case when nullif(skills, '') is not null then 1 end) as notempty from joblist j ---Выводим информацию о прупущенных значениях в поле skills
+
+select length(name) / (select avg(length(name)) from joblist j) as namenanalisys,
+	   length(description) / (select avg(length(name)) from joblist j) as descriptionanalisys,	
+	   sallary  / (select avg(sallary) from joblist j) as sallaryanalisys,
+	   length(skills) / (select avg(length(skills)) from joblist j) as skillsanalisys
+from joblist j limit 10---Соотношение определенного значения в данных к среднему по полю 
 
 select * from joblist j ---Выводим для просмотра всю таблицу
+
