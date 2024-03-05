@@ -12,7 +12,7 @@ update joblist set work_schedule  = lower(work_schedule) ---Приводим к 
 
 select count(case when nullif(sallary, 0) is null then 1 end) as empty, count(case when nullif(sallary, 0) is not null then 1 end) as notempty from joblist j ---Выводим информацию о прупущенных значениях в поле sallary
 
-update joblist set sallary = (select avg(sallary) from joblist) where sallary = 0 --- Заполнение пропущенных элементов поля Sallary средним значением
+delete joblist where sallary = 0 --- Удаление полей с пропущенными значениями по зарплате
 
 select count(case when nullif(skills, '') is null then 1 end) as empty, count(case when nullif(skills, '') is not null then 1 end) as notempty from joblist j ---Выводим информацию о прупущенных значениях в поле skills
 
